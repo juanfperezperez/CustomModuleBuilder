@@ -1,0 +1,21 @@
+<#
+.Synopsis
+   Gets custom module information for module <<<<NEWMODULENAME>>>>
+
+.DESCRIPTION
+   Gets custom module information for module <<<<NEWMODULENAME>>>>
+
+
+#>
+function Get-<<<<NEWMODULENAME>>>>ModuleInformation
+{
+    [CmdletBinding()]
+    [Alias()]
+    Param()
+    Begin{}
+    Process
+    {
+        Get-Module -Name <<<<NEWMODULENAME>>>> | Select-Object -Property Name,Author,Description,GUID
+    }
+    End{}
+}
