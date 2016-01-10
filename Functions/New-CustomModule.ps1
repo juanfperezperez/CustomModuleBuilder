@@ -131,9 +131,11 @@ function New-CustomModule
         if(-not $ConfirmStop){
             #region Experimental Modules location variables
             $xModulesDirectory = If(-not (Test-Path $TargetxModulesDirectory)){
-                New-Item -Path $TargetxModulesDirectory -ItemType Directory -Force -Verbose:$Verbosity -WhatIf:$WhatIf
+                if($ShouldProces){New-Item -Path $TargetxModulesDirectory -ItemType Directory -Force -Verbose:$Verbosity -WhatIf:$WhatIf}
+                else{New-Object -TypeName psobject -Property @{FullName = $TargetxModulesDirectory}}
             }else{
-                Get-Item -Path $TargetxModulesDirectory -Verbose:$Verbosity
+                if($ShouldProces){Get-Item -Path $TargetxModulesDirectory -Verbose:$Verbosity}
+                else{New-Object -TypeName psobject -Property @{FullName = $TargetxModulesDirectory}}
             }
             $xModulesDirectoryPath = $xModulesDirectory.FullName
             #endregion
@@ -142,7 +144,7 @@ function New-CustomModule
             Push-Location -StackName ModuleBuilderLocationStack -Verbose:$Verbosity
         
             #set location for running the function
-            Set-Location -Path $xModulesDirectoryPath -Verbose:$Verbosity
+            if($ShouldProces){Set-Location -Path $xModulesDirectoryPath -Verbose:$Verbosity}
         }
     }
 
