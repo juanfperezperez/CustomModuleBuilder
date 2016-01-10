@@ -153,17 +153,21 @@ function New-CustomModule
         
             #Creates the root module directory which will contain all else
             $NewModuleDirectory = New-Item -ItemType Directory -Path $xModulesDirectoryPath -Name $NewModuleName -Verbose:$Verbosity -WhatIf:$WhatIf
-        
+            if(-not $ShouldProces){$NewModuleDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $xModulesDirectoryPath -ChildPath $NewModuleName)}}
+
             #Creates the Functions directory which will contain all the function scripts
             $NewModuleFunctionsDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'Functions' -Verbose:$Verbosity -WhatIf:$WhatIf
-        
+            if(-not $ShouldProces){$NewModuleFunctionsDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'Functions')}}
+
             #Creates the ModuleResources directory which will contain additional files needed by the module
             $NewModuleResourcesDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'ModuleResources' -Verbose:$Verbosity -WhatIf:$WhatIf
-            Write-Verbose -Message "New module resources driectory is $(Resolve-Path -Path $NewModuleResourcesDirectory.FullName -Relative)" -Verbose:$Verbosity
+            if(-not $ShouldProces){$NewModuleResourcesDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'ModuleResources')}}
+            #Write-Verbose -Message "New module resources driectory is $(Resolve-Path -Path $NewModuleResourcesDirectory.FullName -Relative)" -Verbose:$Verbosity
 
             #Creates the RequiredModules directory which will contain all else
             $NewModuleRequiredModulesDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'RequiredModules' -Verbose:$Verbosity -WhatIf:$WhatIf
-            Write-Verbose -Message "New module required modules driectory is $(Resolve-Path -Path $NewModuleRequiredModulesDirectory.FullName -Relative)" -Verbose:$Verbosity
+            if(-not $ShouldProces){$NewModuleRequiredModulesDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'RequiredModules')}}
+            #Write-Verbose -Message "New module required modules driectory is $(Resolve-Path -Path $NewModuleRequiredModulesDirectory.FullName -Relative)" -Verbose:$Verbosity
             
             #endregion
 
@@ -180,9 +184,11 @@ function New-CustomModule
             Write-Verbose -Message "Setting Manifest ScriptsToProcess to .\RequiredModulesLoader.ps1" -Verbose:$Verbosity
             $ManifestInfo.Add("ScriptsToProcess",".\RequiredModulesLoader.ps1")
 
-            $ManifestInfo.Remove("NewModuleName")
-            $ManifestInfo.Remove("TargetxModulesDirectory")
-            $ManifestInfo.Remove("Confirm")
+            $ManifestInfo.Remove("NewModuleName") | Out-Null
+
+            $ManifestInfo.Remove("TargetxModulesDirectory") | Out-Null
+
+            $ManifestInfo.Remove("Confirm") | Out-Null
 
 
             New-ModuleManifest @ManifestInfo #-Verbose:$Verbosity
