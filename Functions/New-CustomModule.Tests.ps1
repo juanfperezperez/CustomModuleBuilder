@@ -282,4 +282,8 @@ Describe "$sut" -Tags Unit{
         }
     }
     #endregion New-CustomModule with TargetxModulesDirectory argument#>
+
+    #region New-CustomModule with whatif
+
+    #endregion
 }
