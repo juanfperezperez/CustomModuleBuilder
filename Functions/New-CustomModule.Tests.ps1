@@ -282,4 +282,29 @@ Describe "$sut" -Tags Unit{
         }
     }
     #endregion New-CustomModule with TargetxModulesDirectory argument#>
+    Context "New-CustomModule with WhatIf argument" {
+        #region context truths
+        $TestModuleName = "TESTMODULENAMEWI"
+        $TestxModulesFolderPath = 'TestDrive:\Documents\xModules'
+        $TestModuleNameFolderPath = "$TestxModulesFolderPath\TESTMODULENAMEWI"
+        $TestModuleFunctionsFolder = "$TestModuleNameFolderPath\Functions"
+        
+        $TestModuleModuleResourcesFolder = "$TestModuleNameFolderPath\ModuleResources"
+        $TestModuleRequiredModulesFolder = "$TestModuleNameFolderPath\RequiredModules"
+
+        $TestModuleManifestFile = "$TestModuleNameFolderPath\TESTMODULENAMEWI.psd1"
+        $TestModuleModuleFile = "$TestModuleNameFolderPath\TESTMODULENAMEWI.psm1"
+
+        $TestModuleRequiredModulesLoaderFile = "$TestModuleNameFolderPath\RequiredModulesLoader.ps1"
+
+        $TestModuleInfoFunctionfile = "$TestModuleFunctionsFolder\get-TESTMODULENAMEWIModuleInformation.ps1"
+        #endregion
+        
+        It "Runs successfully with the WhatIf argument" {
+            {New-CustomModule -NewModuleName $TestModuleName -Author PesterTest -Description "Test Description" -WhatIf} | Should Not Throw
+        }
+    }
+
+    #region New-CustomModule with whatif
+    #endregion
 }
