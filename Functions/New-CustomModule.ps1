@@ -118,7 +118,13 @@ function New-CustomModule
                    ValueFromPipelineByPropertyName=$False,
                    Position=0)]
         [string[]]
-        $RequiredAssemblies
+        $RequiredAssemblies,
+
+        # Includes the PSDynamicParameters module in the Functions directory.
+        [Parameter(Mandatory=$False,
+                   Position=0)]
+        [switch]
+        $IncludeDynamicParametersModule
     )
 
     Begin{
@@ -161,6 +167,9 @@ function New-CustomModule
             $NewModuleFunctionsDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'Functions' -Verbose:$Verbosity -WhatIf:$WhatIf
             if(-not $ShouldProces){$NewModuleFunctionsDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'Functions')}}
 
+			#Copies the PSDynamicParameters to the Functions directory
+			if($IncludeDynamicParametersModule){Copy-Item -Path (Join-Path -Path $ModuleRoot -ChildPath "Functions\PSDynamicParameters.psm1") -Destination $NewModuleFunctionsDirectory}
+
             #Creates the ModuleResources directory which will contain additional files needed by the module
             $NewModuleResourcesDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'ModuleResources' -Verbose:$Verbosity -WhatIf:$WhatIf
             if(-not $ShouldProces){$NewModuleResourcesDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'ModuleResources')}}
@@ -191,6 +200,8 @@ function New-CustomModule
             $ManifestInfo.Remove("TargetxModulesDirectory") | Out-Null
 
             $ManifestInfo.Remove("Confirm") | Out-Null
+
+			$ManifestInfo.Remove("IncludeDynamicParametersModule") | Out-Null
 
 
             New-ModuleManifest @ManifestInfo #-Verbose:$Verbosity
