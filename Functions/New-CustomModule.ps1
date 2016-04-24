@@ -174,11 +174,6 @@ function New-CustomModule
             $NewModuleResourcesDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'ModuleResources' -Verbose:$Verbosity -WhatIf:$WhatIf
             if(-not $ShouldProces){$NewModuleResourcesDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'ModuleResources')}}
             #Write-Verbose -Message "New module resources driectory is $(Resolve-Path -Path $NewModuleResourcesDirectory.FullName -Relative)" -Verbose:$Verbosity
-
-            #Creates the RequiredModules directory which will contain all else
-            $NewModuleRequiredModulesDirectory = New-Item -ItemType Directory -Path $NewModuleDirectory.FullName -Name 'RequiredModules' -Verbose:$Verbosity -WhatIf:$WhatIf
-            if(-not $ShouldProces){$NewModuleRequiredModulesDirectory = New-Object -TypeName psobject -Property @{FullName=(Join-Path -Path $NewModuleDirectory.FullName -ChildPath 'RequiredModules')}}
-            #Write-Verbose -Message "New module required modules driectory is $(Resolve-Path -Path $NewModuleRequiredModulesDirectory.FullName -Relative)" -Verbose:$Verbosity
             
             #endregion
 
@@ -191,9 +186,6 @@ function New-CustomModule
         
             Write-Verbose -Message "Setting Manifest RootModule to $('.\' + $NewModuleName + '.psm1')" -Verbose:$Verbosity
             $ManifestInfo.Add("RootModule",('.\' + $NewModuleName + '.psm1'))
-        
-            Write-Verbose -Message "Setting Manifest ScriptsToProcess to .\RequiredModulesLoader.ps1" -Verbose:$Verbosity
-            $ManifestInfo.Add("ScriptsToProcess",".\RequiredModulesLoader.ps1")
 
             $ManifestInfo.Remove("NewModuleName") | Out-Null
 
@@ -211,11 +203,6 @@ function New-CustomModule
             $ModuleLoader = Get-Content -Path (Join-Path -Path $ModuleRoot -ChildPath "\ModuleResources\ModuleLoaderScriptTemplate.txt") -Raw -Verbose:$Verbosity
             Set-Content -Value $ModuleLoader -Path (Join-Path -Path $NewModuleDirectory.FullName -ChildPath ($NewModuleName + '.psm1')) -Verbose:$Verbosity -WhatIf:$WhatIf
             #endregion Generate Module loader
-
-            #region Generate required modules loader script for all the modules included in the RequiredModules directory
-            $RequiredModulesLoader = Get-Content -Path (Join-Path -Path $ModuleRoot -ChildPath "\ModuleResources\RequiredModulesLoader.txt") -Raw -Verbose:$Verbosity
-            Set-Content -Value $RequiredModulesLoader -Path (Join-Path -Path $NewModuleDirectory.FullName -ChildPath ('RequiredModulesLoader.ps1')) -Verbose:$Verbosity -WhatIf:$WhatIf
-            #endregion required modules loader script
         
             #region Generate Module data function  NOTE: this should be moved to a resources folder
             $ModuleDataFunctionLoader = (Get-Content -Path (Join-Path -Path $ModuleRoot -ChildPath "\ModuleResources\ModuleDataFunctionLoader.txt") -Raw -Verbose:$Verbosity) -replace '<<<<NEWMODULENAME>>>>',$NewModuleName

@@ -39,13 +39,6 @@ Describe "Module: $module" -Tags Unit {
         
         }
 
-        It "Contains the RequiredModulesLoader path in the manifest (ScriptsToProcess = @('RequiredModulesLoader.ps1'))"{
-        
-            "$here\$module.psd1" | Should Exist
-            "$here\$module.psd1" | Should Contain "RequiredModulesLoader.ps1"
-        
-        }
-
         It "Passes the Test-ModuleManifest test on the manifest file"{
         
             {Test-ModuleManifest -Path "$here\$module.psd1"} | Should Not Throw
@@ -67,12 +60,6 @@ Describe "Module: $module" -Tags Unit {
         It "Has a ModuleResources folder"{
         
             "$here\ModuleResources" | Should Exist
-
-        }
-
-        It "Has a RequiredModules folder"{
-        
-            "$here\RequiredModules" | Should Exist
 
         }
 

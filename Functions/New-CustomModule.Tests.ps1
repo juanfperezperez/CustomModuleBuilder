@@ -45,12 +45,9 @@ Describe "$sut" -Tags Unit{
         $TestModuleFunctionsFolder = "$TestModuleNameFolderPath\Functions"
         
         $TestModuleModuleResourcesFolder = "$TestModuleNameFolderPath\ModuleResources"
-        $TestModuleRequiredModulesFolder = "$TestModuleNameFolderPath\RequiredModules"
 
         $TestModuleManifestFile = "$TestModuleNameFolderPath\TESTMODULENAME.psd1"
         $TestModuleModuleFile = "$TestModuleNameFolderPath\TESTMODULENAME.psm1"
-
-        $TestModuleRequiredModulesLoaderFile = "$TestModuleNameFolderPath\RequiredModulesLoader.ps1"
 
         $TestModuleInfoFunctionfile = "$TestModuleFunctionsFolder\get-TESTMODULENAMEModuleInformation.ps1"
         #endregion
@@ -91,12 +88,6 @@ Describe "$sut" -Tags Unit{
         
         }
         
-        It "Creates a RequiredModules folder"{
-        
-            $TestModuleRequiredModulesFolder | Should Exist
-        
-        }
-        
         It "Creates a manifest file"{
         
             $TestModuleManifestFile | Should Exist
@@ -130,25 +121,6 @@ Describe "$sut" -Tags Unit{
         It "Passes the PSScriptAnalyzer analysis on the module file"{
             (Invoke-ScriptAnalyzer -Path $TestModuleModuleFile) | Should BeNullOrEmpty
         }
-        
-        It "Creates a RequiredModulesLoader file"{
-        
-            $TestModuleRequiredModulesLoaderFile | Should Exist
-        
-        }
-
-        It "The RequiredModulesLoader file is valid powershell (has no script errors)" {
-    
-            $content = Get-Content -Path $TestModuleRequiredModulesLoaderFile -ErrorAction Stop
-            $errors = $null
-            $null = [System.Management.Automation.PSParser]::Tokenize($content,[ref]$errors)
-    
-            $errors.Count | Should Be 0
-        }
-
-        It "Passes the PSScriptAnalyzer analysis on RequiredModulesLoader"{
-            (Invoke-ScriptAnalyzer -Path $TestModuleRequiredModulesLoaderFile) | Should BeNullOrEmpty
-        }
 
         It "Creates the info function"{
         
@@ -181,12 +153,9 @@ Describe "$sut" -Tags Unit{
         $TestModuleFunctionsFolder = "$TestModuleNameFolderPath\Functions"
 
         $TestModuleModuleResourcesFolder = "$TestModuleNameFolderPath\ModuleResources"
-        $TestModuleRequiredModulesFolder = "$TestModuleNameFolderPath\RequiredModules"
 
         $TestModuleManifestFile = "$TestModuleNameFolderPath\TESTMODULENAMEwARG.psd1"
         $TestModuleModuleFile = "$TestModuleNameFolderPath\TESTMODULENAMEwARG.psm1"
-
-        $TestModuleRequiredModulesLoaderFile = "$TestModuleNameFolderPath\RequiredModulesLoader.ps1"
 
         $TestModuleInfoFunctionfile = "$TestModuleFunctionsFolder\get-TESTMODULENAMEwARGModuleInformation.ps1"
         #endregion
@@ -219,12 +188,6 @@ Describe "$sut" -Tags Unit{
         It "Creates a ModuleResources folder"{
         
             $TestModuleModuleResourcesFolder | Should Exist
-        
-        }
-        
-        It "Creates a RequiredModules folder"{
-        
-            $TestModuleRequiredModulesFolder | Should Exist
         
         }
         
@@ -290,12 +253,9 @@ Describe "$sut" -Tags Unit{
         $TestModuleFunctionsFolder = "$TestModuleNameFolderPath\Functions"
         
         $TestModuleModuleResourcesFolder = "$TestModuleNameFolderPath\ModuleResources"
-        $TestModuleRequiredModulesFolder = "$TestModuleNameFolderPath\RequiredModules"
 
         $TestModuleManifestFile = "$TestModuleNameFolderPath\TESTMODULENAMEWI.psd1"
         $TestModuleModuleFile = "$TestModuleNameFolderPath\TESTMODULENAMEWI.psm1"
-
-        $TestModuleRequiredModulesLoaderFile = "$TestModuleNameFolderPath\RequiredModulesLoader.ps1"
 
         $TestModuleInfoFunctionfile = "$TestModuleFunctionsFolder\get-TESTMODULENAMEWIModuleInformation.ps1"
         #endregion
