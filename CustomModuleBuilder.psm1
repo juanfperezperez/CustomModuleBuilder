@@ -11,5 +11,5 @@ Write-Verbose "Importing Functions"
 $availableModules = Get-Module -ListAvailable -Name Pester,PSScriptAnalyzer | Select-Object -ExpandProperty Name
 
 if(('Pester' -notin $availableModules) -or ('PSScriptAnalyzer' -notin $availableModules)){
-    Write-Debug  -Message "Pester and PSScriptAnalyzer are required to run the tests included in this module"
+    Write-Warning -Message "Pester and PSScriptAnalyzer are required to run the tests included in this module"
 }
